@@ -7,7 +7,8 @@ require "serialport"
 MUTEX_RW = Mutex.new
 MUTEX_KILL_CLIENTS = Mutex.new
 
-LOG = Logger.new(STDOUT)
+#LOG = Logger.new(STDOUT)
+LOG=Logger.new( '/tmp/log.txt', 'daily' )
 LOG.level = Logger::DEBUG
 
 
@@ -64,14 +65,13 @@ class Server
   
  def readFromClient(client)
    while line = client.gets   # Read lines from the socket
-    puts line.chop      # And print with platform line terminator
-    #TODO write to arduino
+    LOG.debug "Readed from client '#{line.chop}'"      # And print with platform line terminator
     writeToArduino line.chop
   end
  end
  
   def writeToClient(data)
-   LOG.debug "Trying to send #{data} to clients"
+   LOG.debug "Trying to send '#{data}' to clients"
     MUTEX_KILL_CLIENTS.synchronize{ 
      @clients.each { |client|
       begin
