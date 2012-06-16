@@ -71,8 +71,7 @@ class Server
  end
  
   def writeToClient(data)
-   LOG.debug "Trying to send '#{data}' to clients"
-    #MUTEX_KILL_CLIENTS.synchronize{ 
+   LOG.debug "Trying to send '#{data}' to clients" 
      @clients.each { |client|
       begin
         client.write data
@@ -80,7 +79,6 @@ class Server
         @clientsToClose << client
       end
       }
-    #}
     deleteBadClient
  end
 
@@ -99,34 +97,27 @@ class Server
    LOG.info "Trying to read from Arduino"
   
    while !@stopped do  # Read lines from the socket
-     #MUTEX_RW.synchronize{
        line = @arduino.gets
        if !line.nil?
         LOG.info line      # And print with platform line terminator  
         writeToClient(line)
        end
-     #}
   end
  end
  
  def writeToArduino(data)
    LOG.debug "Writing to Arduino '#{data}'"
-   #MUTEX_RW.synchronize{
     @arduino.puts data
-   #}
  end
  
 
   def deleteBadClient
-    #MUTEX_KILL_CLIENTS.synchronize{
     @clientsToClose.each { |client|
       @clients.delete(client)
       }
-    #}
   end
 end
 
 s = Server.new
 s.start
-#sleep 30
-#s.stop
+
