@@ -2,7 +2,7 @@ require 'logger'
 
 require 'rubygems'
 require 'parseconfig'
-
+require 'hash_deep_merge'
 
 # Hacking Parseconfig pour récupérer les parametres directement sous forme de hash
 # definition de la methode to_h 
@@ -57,8 +57,7 @@ class ConfigReader
     
     def merge
       @@configs.each { |config_key, config_value|
-        puts config_value.to_h
-        @@mainconfig.update config_value.to_h    
+        @@mainconfig.deep_merge! config_value.to_h    
       }
     end
     
