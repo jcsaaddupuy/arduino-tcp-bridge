@@ -12,8 +12,8 @@ class ParseConfig
   end
 end
 
-LOG = Logger.new(STDOUT)
-LOG.level = Logger::DEBUG
+LOGGER = Logger.new(STDOUT)
+LOGGER.level = Logger::DEBUG
 
 current_folder =  File.expand_path(File.dirname(__FILE__))
 
@@ -39,10 +39,10 @@ class ConfigReader
       @@config_folders.each { |folder|
         @@config_files.each {|file|
             full_filename =  File.expand_path(folder + "/" + file)
-            LOG.debug "Trying file #{full_filename}"
+            LOGGER.debug "Trying file #{full_filename}"
             exist = File.exist?(full_filename)
             if exist 
-              LOG.debug "File #{full_filename}"
+              LOGGER.debug "File #{full_filename}"
               config = loadFile(full_filename)
               @@configs[full_filename]=config  
             end 
@@ -51,7 +51,7 @@ class ConfigReader
     end  
     
     def loadFile(fname)
-      LOG.debug "Loading #{fname}"
+      LOGGER.debug "Loading #{fname}"
       return ParseConfig.new(fname)
     end
     
