@@ -66,13 +66,14 @@ class Server
   
  def readFromClient(client)
    while line = client.gets   # Read lines from the socket
-    LOG.debug "Readed from client '#{line.strip}'"      # And print with platform line terminator
-    writeToArduino line.strip
+    line.strip!
+    LOG.debug "Readed from client '#{line}'"      # And print with platform line terminator
+    writeToArduino line
   end
  end
  
   def writeToClient(data)
-   LOG.debug "Trying to send '#{data.strip}' to clients" 
+   LOG.debug "Trying to send '#{data}' to clients" 
      @clients.each { |client|
       begin
         client.write data
@@ -96,15 +97,15 @@ class Server
    while !@stopped do  # Read lines from the socket
        line = @arduino.gets
        if !line.nil?
-        LOG.info line      # And print with platform line terminator  
+        LOG.info "Readed : '#{line}'"      # And print with platform line terminator  
         writeToClient(line)
        end
   end
  end
  
  def writeToArduino(data)
-   LOG.debug "Writing to Arduino '#{data.strip}'"
-    @arduino.puts data.strip
+   LOG.debug "Writing to Arduino '#{data}'"
+    @arduino.puts data
  end
  
 
