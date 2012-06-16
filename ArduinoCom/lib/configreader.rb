@@ -13,7 +13,7 @@ class ParseConfig
 end
 
 LOGGER = Logger.new(STDOUT)
-LOGGER.level = Logger::DEBUG
+LOGGER.level = Logger::INFO
 
 current_folder =  File.expand_path(File.dirname(__FILE__))
 
@@ -42,7 +42,7 @@ class ConfigReader
             LOGGER.debug "Trying file #{full_filename}"
             exist = File.exist?(full_filename)
             if exist 
-              LOGGER.debug "File #{full_filename}"
+              LOGGER.info "Loading #{full_filename}"
               config = loadFile(full_filename)
               @@configs[full_filename]=config  
             end 
