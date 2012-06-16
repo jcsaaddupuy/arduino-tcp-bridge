@@ -99,6 +99,7 @@ class Server
    while !@stopped do  # Read lines from the socket
        line = @arduino.gets
        if !line.nil?
+        line.strip!
         LOG.info "Readed : '#{line}'"      # And print with platform line terminator  
         writeToClient(line)
        end
