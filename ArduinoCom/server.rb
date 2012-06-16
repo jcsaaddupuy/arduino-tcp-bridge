@@ -74,6 +74,7 @@ class Server
  end
  
   def writeToClient(data)
+   data.strip!
    LOG.debug "Trying to send '#{data}' to clients" 
      @clients.each { |client|
       begin
