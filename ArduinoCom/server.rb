@@ -23,6 +23,7 @@ class Server
   end
   
   def start
+    LOG.info "#{'*'*10} Starting ! #{'*'*10}"
     openArduino 
     tArduino = Thread.new{ self.readFromArduino }
     tArduino.abort_on_exception = true
