@@ -7,8 +7,8 @@ require "serialport"
 require_relative "appconfig" 
 
 logfile, logrotation , loglevel = AppConfig.getloggerConfig
-LOG=Logger.new(logfile, logrotation )
-LOG.level = loglevel
+log=Logger.new(logfile, logrotation )
+log.level = loglevel
 
 
 class Server
@@ -41,7 +41,7 @@ class Server
         client = @server.accept
         
         @clients << client
-        LOG.info "Accepted new client"
+        log.info "Accepted new client"
         tRead = Thread.new { self.readFromClient(client) }
         tRead.abort_on_exception = true
      end
@@ -49,12 +49,12 @@ class Server
   
   def stop
     @stopped=true
-    LOG.info "Stop"
+    log.info "Stop"
     self.doStop
   end  
   
  def doStop
-  LOG.info "Closing all clients"
+  log.info "Closing all clients"
   @clients.each { |client|
     if !client.closed?
       client.puts "Bye!"
@@ -66,13 +66,13 @@ class Server
   
  def readFromClient(client)
    while line = client.gets   # Read lines from the socket
-    LOG.debug "Readed from client '#{line.chop}'"      # And print with platform line terminator
+    log.debug "Readed from client '#{line.chop}'"      # And print with platform line terminator
     writeToArduino line.chop
   end
  end
  
   def writeToClient(data)
-   LOG.debug "Trying to send '#{data}' to clients" 
+   log.debug "Trying to send '#{data}' to clients" 
      @clients.each { |client|
       begin
         client.write data
@@ -87,23 +87,23 @@ class Server
     port_str,baud_rate,data_bits,stop_bits,parity = AppConfig.getArduinoConfig
     
     @arduino = SerialPort.new(port_str, baud_rate, data_bits, stop_bits, parity)
-    LOG.info "Arduino open"
+    log.info "Arduino open"
   end
   
   def readFromArduino()
-   LOG.info "Trying to read from Arduino"
+   log.info "Trying to read from Arduino"
   
    while !@stopped do  # Read lines from the socket
        line = @arduino.gets
        if !line.nil?
-        LOG.info line      # And print with platform line terminator  
+        log.info line      # And print with platform line terminator  
         writeToClient(line)
        end
   end
  end
  
  def writeToArduino(data)
-   LOG.debug "Writing to Arduino '#{data}'"
+   log.debug "Writing to Arduino '#{data}'"
     @arduino.puts data
  end
  
