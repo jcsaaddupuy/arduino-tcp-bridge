@@ -17,26 +17,34 @@ LOG.level = Logger::DEBUG
 
 current_folder =  File.expand_path(File.dirname(__FILE__))
 
-CONFIG_FILES = ["arduinocom.conf"]
-CONFIG_FOLDERS = [current_folder+"/../conf","/etc/default/arduinocom", "~/.config/arduinocom"]
+
+CONFIG_FOLDERS = [current_folder+"/../conf","/etc/default/", "~/.config/"]
 
 
 class ConfigReader
-   @@config_file_found=0
    @@loaded = false
-   @@conffigs={}
+   @@configs={}
    @@mainconfig={}
+   
+   @@config_files = []
+   @@config_folders = []
+   def initialize(appname,configfiles)
+     @@config_files=configfiles
+     CONFIG_FOLDERS.each { |folder|
+        @@config_folders << folder+"/"+appname   
+     }
+   end
+   
     def loadConfig
-      CONFIG_FOLDERS.each { |folder|
-        CONFIG_FILES.each {|file|
+      @@config_folders.each { |folder|
+        @@config_files.each {|file|
             full_filename =  File.expand_path(folder + "/" + file)
             LOG.debug "Trying file #{full_filename}"
             exist = File.exist?(full_filename)
             if exist 
               LOG.debug "File #{full_filename}"
               config = loadFile(full_filename)
-              @@conffigs[full_filename]=config
-              @@config_file_found+=1  
+              @@configs[full_filename]=config  
             end 
           }
       }
@@ -48,9 +56,9 @@ class ConfigReader
     end
     
     def merge
-      @@conffigs.each { |config_key, config_value|
-        puts config_value.get_params()
-        @@mainconfig.merge! config_value.to_h    
+      @@configs.each { |config_key, config_value|
+        puts config_value.to_h
+        @@mainconfig.update config_value.to_h    
       }
     end
     
@@ -58,12 +66,11 @@ class ConfigReader
       if !@@loaded
         loadConfig
         merge
-        puts @@mainconfig
         @@loaded=true
       end
+      @@mainconfig # return main config
     end
 end
 
-c = ConfigReader.new
-c.load
+
 
