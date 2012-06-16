@@ -4,12 +4,11 @@ require 'logger'
 require 'rubygems'
 require "serialport"
 
-MUTEX_RW = Mutex.new
-MUTEX_KILL_CLIENTS = Mutex.new
+require_relative "appconfig" 
 
-#LOG = Logger.new(STDOUT)
-LOG=Logger.new( '/tmp/log.txt', 'daily' )
-LOG.level = Logger::DEBUG
+logfile, logrotation , loglevel = AppConfig.getloggerConfig
+LOG=Logger.new(logfile, logrotation )
+LOG.level = loglevel
 
 
 class Server
@@ -27,7 +26,9 @@ class Server
     openArduino 
     tArduino = Thread.new{ self.readFromArduino }
     tArduino.abort_on_exception = true
-    @server = TCPServer.open(20000)   # Socket to listen on port 2000
+    bind_to, port = AppConfig.getServerConfig 
+    
+    @server = TCPServer.open(port)   # Socket to listen on port 2000
     t1 = Thread.new { self.acceptClients }
     t1.abort_on_exception = true
     t1.join
@@ -83,11 +84,7 @@ class Server
  end
 
   def openArduino
-    port_str = "/dev/ttyACM0"  #may be different for you
-    baud_rate = 115200
-    data_bits = 8
-    stop_bits = 1
-    parity = SerialPort::NONE
+    port_str,baud_rate,data_bits,stop_bits,parity = AppConfig.getArduinoConfig
     
     @arduino = SerialPort.new(port_str, baud_rate, data_bits, stop_bits, parity)
     LOG.info "Arduino open"
