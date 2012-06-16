@@ -72,10 +72,10 @@ class Server
  end
  
   def writeToClient(data)
-   LOG.debug "Trying to send '#{data}' to clients" 
+   LOG.debug "Trying to send '#{data.chop}' to clients" 
      @clients.each { |client|
       begin
-        client.write data
+        client.write data.chop
       rescue
         @clientsToClose << client
       end
@@ -103,7 +103,7 @@ class Server
  end
  
  def writeToArduino(data)
-   LOG.debug "Writing to Arduino '#{data}'"
+   LOG.debug "Writing to Arduino '#{data.chop}'"
     @arduino.puts data
  end
  

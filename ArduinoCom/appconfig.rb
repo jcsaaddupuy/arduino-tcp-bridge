@@ -34,7 +34,7 @@ class AppConfig
     data_bits = Integer(@@config['adruino']['data_bits'])
     stop_bits = Integer(@@config['adruino']['stop_bits'])
 
-    parity = SerialPort::NONE
+    parity = SerialPort::NONE  #TODO move to conf
     return port_str, baud_rate, data_bits, stop_bits, parity
   end
 

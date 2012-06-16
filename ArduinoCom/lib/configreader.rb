@@ -40,8 +40,7 @@ class ConfigReader
         @@config_files.each {|file|
             full_filename =  File.expand_path(folder + "/" + file)
             LOGGER.debug "Trying file #{full_filename}"
-            exist = File.exist?(full_filename)
-            if exist 
+            if File.exist?(full_filename) 
               LOGGER.info "Loading #{full_filename}"
               config = loadFile(full_filename)
               @@configs[full_filename]=config  
