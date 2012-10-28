@@ -66,10 +66,15 @@ class Server
  end
   
  def readFromClient(client)
+  begin
    while line = client.gets   # Read lines from the socket
     line.strip!
     LOG.debug "Readed from client '#{line}'"      # And print with platform line terminator
     writeToArduino line
+  end
+  rescue Exception => e
+	LOG.error e.message
+	LOG.error e.backtrace.inspect
   end
  end
  
