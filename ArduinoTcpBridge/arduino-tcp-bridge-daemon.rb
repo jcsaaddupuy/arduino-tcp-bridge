@@ -4,4 +4,4 @@
 require 'rubygems'        # if you use RubyGems
 require 'daemons'
 
-Daemons.run('server.rb')
+Daemons.run('arduino-tcp-bridge.rb')

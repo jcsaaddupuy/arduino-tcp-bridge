@@ -10,7 +10,7 @@ class AppConfig
   @@config=nil
   def self.load
     if @cr.nil?
-      @@cr = ConfigReader.new("arduinocom",["arduinocom.conf"])
+      @@cr = ConfigReader.new("arduino-tcp-bridge",["arduino-tcp-bridge.conf"])
     end
     if @@config.nil?
      @@config = @@cr.load
