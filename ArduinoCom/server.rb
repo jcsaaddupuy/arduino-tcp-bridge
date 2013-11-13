@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'socket'                # Get sockets from stdlib
 require 'logger'
 
