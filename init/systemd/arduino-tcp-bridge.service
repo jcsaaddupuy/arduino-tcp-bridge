@@ -1,0 +1,10 @@
+[Unit]
+Description=Arduino TCP Bridge
+
+[Service]
+User=arduinocom
+WorkingDirectory=/home/arduinocom/arduino-tcp-bridge/ArduinoTcpBridge/
+ExecStart=/usr/local/rvm/rubies/ruby-1.9.2-p320/bin/ruby arduino-tcp-bridge.rb
+
+[Install]
+WantedBy=multi-user.target
