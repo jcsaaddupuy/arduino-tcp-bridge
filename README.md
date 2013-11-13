@@ -6,6 +6,8 @@ This tool make a tcp-to-serial bridge to communicate to an arduino wih multiples
 It does just writes anything that come on the server sockets to the arduino an write to sockets clients
 anythings that is readed from the arduino.
 
+Read and writes are done line by line.
+
 Compatibility
 -------------
 Developped and tested with ruby 1.9.2. Not tested with upper version, something may break :)
@@ -13,16 +15,16 @@ Developped and tested with ruby 1.9.2. Not tested with upper version, something 
 
 Install it
 -----------
-``bash
+```bash
 bundle install
-``
+```
 
 Configure it
 -------------
-Configuration is located in conf/arduino-tcp-bridge/arduino-tcp-bridge.conf
+Configuration is located in conf/arduino-tcp-bridge/arduino-tcp-bridge.conf.
 The config file can be copyed to ~/.config/arduino-tcp-bridge/ or in /etc/default/arduino-tcp-bridge/.
 
-Thes file ill be readed in this order :
+These files will be readed in this order :
 - local config file (in conf/arduino-tcp-bridge/)
 - system wide configuration (in /etc/default/arduino-tcp-bridge/)
 - current user configuration (in ~/.config/arduino-tcp-bridge/)
@@ -39,23 +41,24 @@ By default :
 Run it
 -------
 Thanks to the gem daemons, the script can be run as a service :
-``bash
+```bash
 ruby arduino-tcp-bridge.rb start # will fork in the background
 ruby arduino-tcp-bridge.rb run # will stay in the foreground
 
 ruby arduino-tcp-bridge.rb stop # stops the daemon
-``
+```
 
 Test it
 -------
-``bash
-telnet thebridge 20000 # replace the bridge with your host
+You can then open multiples connection on the bridge, with telnet for example :
+```bash
+telnet thebridge 20000 # replace "thebridge" with your host
 rying 192.168.0.7...
 Connected to arduino.lan.
 Escape character is '^]'.
 something you want to forward; #This is sent to the arduino.
 3,Unknown command;            # This is readed from the arduino.
-``
+```
 
 Logs
 -------
